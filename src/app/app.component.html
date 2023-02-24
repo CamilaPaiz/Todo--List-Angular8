@@ -2,21 +2,26 @@
   <h1>{{ title }}</h1>
   <div>
     <div>
-      <ul *ngFor="let item of tasks">
-        <li >
-          
-          <input type="checkbox">
-          <span [ngClass]="{ done: item.done }">{{ item.name }}</span>
-          <button (click)="removeTask(item.id)">Delete</button>
-        </li>
-      </ul>
+          <ul *ngFor="let item of tasks">
+            <li>
+              <input type="checkbox">
+              <span [ngClass]="{ done: item.done }" *ngIf="!editingTask || item.id !== editingTask.id"
+              >{{ item.name }}</span>
+              <input type="text" [(ngModel)]="editingTask.name" *ngIf="editingTask && item.id === editingTask.id">
+              <button (click)="removeTask(item.id)">Delete</button>
+              <button (click)="editTask(item.id)">Edit</button>
+              <button (click)="updateTask()" *ngIf="editingTask">Save</button>
+              <button (click)="cancelEdit()" *ngIf="editingTask">Cancel</button>
+            </li>
+          </ul>
     </div>
     <div >
       <form (submit)="addTask()">
         <div>
           <input type="text" [(ngModel)]="newTask" name="newTask" placeholder="Add a new task...">
         </div>
-        <button type="submit" >Add Todo</button>
+        <button type="submit" [disabled]="isSubmitting">Add Task</button>
+
       </form>
     </div>
   </div>
