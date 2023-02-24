@@ -60,9 +60,20 @@ export class AppComponent {
     }
   }
   
+  
   cancelEdit() {
     this.editingTask = null;
   }
   
-
+  markDone(id: number, done: boolean) {
+    this.http.patch<Task>(`http://127.0.0.1:8000/todo/${id}/`, { done }).subscribe(() => {
+      this.tasks = this.tasks.map(task => {
+        if (task.id === id) {
+          return { ...task, done };
+        }
+        return task;
+      });
+    });
+  }
+  
 }
