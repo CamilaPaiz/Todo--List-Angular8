@@ -1,3 +1,23 @@
 <div class="container">
   <h1>{{ title }}</h1>
+  <div>
+    <div>
+      <ul *ngFor="let item of tasks">
+        <li >
+          
+          <input type="checkbox">
+          <span [ngClass]="{ done: item.done }">{{ item.name }}</span>
+          <button (click)="removeTask(item.id)">Delete</button>
+        </li>
+      </ul>
+    </div>
+    <div >
+      <form (submit)="addTask()">
+        <div>
+          <input type="text" [(ngModel)]="newTask" name="newTask" placeholder="Add a new task...">
+        </div>
+        <button type="submit" >Add Todo</button>
+      </form>
+    </div>
+  </div>
 </div>
