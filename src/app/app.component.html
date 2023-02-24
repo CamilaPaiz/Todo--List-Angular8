@@ -2,15 +2,15 @@
   <h1>{{ title }}</h1>
   <div>
     <div>
-      <ul *ngFor="let item of tasks">
-        <li>
+      <ul>
+        <li *ngFor="let item of tasks">
           <input type="checkbox" [(ngModel)]="item.done" (click)="markDone(item.id, !item.done)">
           <span [ngClass]="{ 'line-through': item.done }" *ngIf="!editingTask || item.id !== editingTask.id">{{ item.name }}</span>
-          <input type="text" [(ngModel)]="editingTask.name" *ngIf="editingTask && item.id === editingTask.id">
+          <input type="text" [(ngModel)]="item.name" *ngIf="editingTaskId === item.id">
           <button (click)="removeTask(item.id)">Delete</button>
-          <button (click)="editTask(item.id)">Edit</button>
-          <button (click)="updateTask()" *ngIf="editingTask">Save</button>
-          <button (click)="cancelEdit()" *ngIf="editingTask">Cancel</button>
+          <button (click)="editTask(item.id)" *ngIf="editingTaskId !== item.id">Edit</button>
+          <button (click)="updateTask(item)" *ngIf="editingTaskId === item.id">Save</button>
+        
         </li>
       </ul>
     </div>
