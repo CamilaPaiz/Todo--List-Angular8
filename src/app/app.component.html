@@ -1,25 +1,35 @@
 <div class="container">
-  <h1>{{ title }}</h1>
+  <div class="jumbotron">
+    <h1>{{ title }}</h1>
+  </div>
+  
   <div>
     <div>
-      <ul>
-        <li *ngFor="let item of tasks">
+      <ul class="list-group">
+        <li *ngFor="let item of tasks" class="list-group-item">
           <input type="checkbox" [(ngModel)]="item.done" (click)="markDone(item.id, !item.done)">
           <span [ngClass]="{ 'line-through': item.done }" *ngIf="!editingTask || item.id !== editingTask.id">{{ item.name }}</span>
-          <input type="text" [(ngModel)]="item.name" *ngIf="editingTaskId === item.id">
-          <button (click)="removeTask(item.id)">Delete</button>
-          <button (click)="editTask(item.id)" *ngIf="editingTaskId !== item.id">Edit</button>
-          <button (click)="updateTask(item)" *ngIf="editingTaskId === item.id">Save</button>
-        
+          <div *ngIf="editingTaskId === item.id" class="btn-group">
+            <input type="text" [(ngModel)]="editingTaskCopy.name" *ngIf="editingTaskId === item.id">
+            <button (click)="updateTask(editingTaskCopy)"  class="btn btn-success">Save</button>
+            <button (click)="cancelEdit()"class="btn btn-dark">Cancel</button>
+          </div>
+          <div>
+            <button (click)="removeTask(item.id)" *ngIf="editingTaskId !== item.id" class="btn btn-danger">Delete</button>
+            <button (click)="editTask(item.id)" *ngIf="editingTaskId !== item.id"  class="btn btn-info">Edit</button>
+          </div>
         </li>
+        
       </ul>
     </div>
     <div >
       <form (submit)="addTask()">
-        <div>
-          <input type="text" [(ngModel)]="newTask" name="newTask" placeholder="Add a new task...">
+        <hr>
+        <div class="form-group">
+          <label>Task name</label>
+          <input type="text" [(ngModel)]="newTask" name="newTask" class="form-control">
         </div>
-        <button type="submit" [disabled]="isSubmitting">Add Task</button>
+        <button type="submit" [disabled]="isSubmitting" class="btn btn-primary">Add Task</button>
 
       </form>
     </div>

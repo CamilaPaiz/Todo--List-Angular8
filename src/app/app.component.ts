@@ -19,6 +19,7 @@ export class AppComponent {
   tasks: Task[] = [];
   newTask = '';
   editingTaskId: number | null = null;
+ editingTaskCopy: Task = { id: 0, name: '', done: false };
   isSubmitting = false;
   
   constructor(private http: HttpClient) {}
@@ -45,8 +46,11 @@ export class AppComponent {
   }
 
   editTask(id: number) {
+    const task = this.tasks.find(t => t.id === id);
+    this.editingTaskCopy = { ...task };
     this.editingTaskId = id;
   }
+  
   
   updateTask(task: Task) {
     this.http.put<Task>(`http://127.0.0.1:8000/todo/${task.id}/`, task).subscribe(() => {
@@ -57,6 +61,17 @@ export class AppComponent {
       this.editingTaskId = null;
     });
   }
+  
+  cancelEdit() {
+    const taskIndex = this.tasks.findIndex(t => t.id === this.editingTaskId);
+    if (taskIndex >= 0) {
+      const originalTask = { ...this.tasks[taskIndex] };
+      this.tasks[taskIndex] = originalTask;
+    }
+    this.editingTaskId = null;
+  }
+  
+
   
   markDone(id: number, done: boolean) {
     this.http.patch<Task>(`http://127.0.0.1:8000/todo/${id}/`, { done }).subscribe(() => {
